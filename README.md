@@ -1,4 +1,4 @@
-# Computer Architecture System Programming Lab 182 (CASPL)
+# Computer Architecture System & Programming Lab 182 (CASPL)
 
 ## Assignments
 
