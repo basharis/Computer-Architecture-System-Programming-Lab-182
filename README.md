@@ -58,10 +58,8 @@ We have implemented a small FTP client and server. The system supports connectin
 ---
 ## Programming Languages
 
-* C++ (Built with makefile)
-* Java (Built with Maven)
-* Python
-* SQL
+* C (Built with makefile)
+* x86/64 Assembly
 
 ## Author
 
