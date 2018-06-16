@@ -1,0 +1,33 @@
+PROG = myshell
+
+CC = gcc
+LD = gcc
+
+LDFLAGS = -g -Wall
+CCFLAGS = -g -Wall -c
+
+OBJS = task1c.o line_parser.o
+
+# All Targets
+all: $(PROG)
+
+# Tool invocations
+# Executable "main" depends on the files...
+
+$(PROG): $(OBJS)
+	$(LD) $(LDFLAGS) $(OBJS) -o $(PROG)
+
+# Depends on the source and header files
+
+task1c.o: task1c.c
+	$(CC) $(CCFLAGS) task1c.c -o task1c.o
+
+line_parser.o: line_parser.c line_parser.h
+	$(CC) $(CCFLAGS) line_parser.c -o line_parser.o
+	
+#tell make that "clean" is not a file name!
+.PHONY: clean
+
+#Clean the build directory
+clean:
+	rm -f *.o $(PROG)

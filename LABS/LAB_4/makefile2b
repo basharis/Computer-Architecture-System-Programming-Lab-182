@@ -1,0 +1,37 @@
+PROG = task2b
+
+CC = gcc
+LD = ld
+NASM = nasm
+
+LDFLAGS = -m elf_x86_64
+CCFLAGS = -m64 -Wall -ansi -c -nostdlib -fno-stack-protector
+NASMFLAGS = -f elf64
+
+OBJS = start.o util.o $(PROG).o
+
+# All Targets
+all: $(PROG)
+
+# Tool invocations
+# Executable "main" depends on the files...
+
+$(PROG): $(OBJS)
+	$(LD) $(LDFLAGS) $(OBJS) -o search
+
+# Depends on the source and header files
+start.o: start.s
+	$(NASM) $(NASMFLAGS) start.s -o start.o
+
+util.o: util.c
+	$(CC) $(CCFLAGS) util.c -o util.o
+
+$(PROG).o: $(PROG).c
+	$(CC) $(CCFLAGS) $(PROG).c -o $(PROG).o
+	
+#tell make that "clean" is not a file name!
+.PHONY: clean
+
+#Clean the build directory
+clean:
+	rm -f *.o search

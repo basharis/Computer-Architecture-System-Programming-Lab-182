@@ -1,0 +1,2 @@
+gcc -g -Wall -c -no-pie sic.c -o sic.o
+gcc -g -Wall -no-pie sic.o -o sic

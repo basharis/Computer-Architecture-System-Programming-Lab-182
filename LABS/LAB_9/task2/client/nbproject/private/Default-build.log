@@ -1,0 +1,4 @@
+gcc -g -Wall -c -m64 client.c -o client.o
+gcc -g -Wall -c -m64 line_parser.c -o line_parser.o
+gcc -g -Wall -c -m64 common.c -o common.o
+gcc -g -Wall client.o line_parser.o common.o -o client

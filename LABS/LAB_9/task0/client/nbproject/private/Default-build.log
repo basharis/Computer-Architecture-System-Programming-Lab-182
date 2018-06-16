@@ -1,0 +1,43 @@
+gcc -g -Wall -c -m64 client.c -o client.o
+In file included from client.c:1:0:
+client.c: In function ‘handle_conn’:
+client.h:23:14: warning: passing argument 2 of ‘getaddrinfo’ makes pointer from integer without a cast [-Wint-conversion]
+ #define PORT 2018
+              ^
+client.c:53:44: note: in expansion of macro ‘PORT’
+     if ((status = getaddrinfo("127.0.0.1", PORT, &hints, &server_info)) != 0){
+                                            ^
+In file included from client.h:14:0,
+                 from client.c:1:
+/usr/include/netdb.h:662:12: note: expected ‘const char * restrict’ but argument is of type ‘int’
+ extern int getaddrinfo (const char *__restrict __name,
+            ^
+client.c:60:61: warning: passing argument 4 of ‘send’ makes integer from pointer without a cast [-Wint-conversion]
+     bytes_sent = send(_socket_fd, "hello", strlen("hello"), NULL);
+                                                             ^
+In file included from client.h:12:0,
+                 from client.c:1:
+/usr/include/x86_64-linux-gnu/sys/socket.h:149:16: note: expected ‘int’ but argument is of type ‘void *’
+ extern ssize_t send (int __fd, const void *__buf, size_t __n, int __flags);
+                ^
+client.c:62:56: warning: passing argument 4 of ‘recv’ makes integer from pointer without a cast [-Wint-conversion]
+     bytes_recv = recv(_socket_fd, buffer, BUFFER_SIZE, NULL);
+                                                        ^
+In file included from client.h:12:0,
+                 from client.c:1:
+/usr/include/x86_64-linux-gnu/sys/socket.h:156:16: note: expected ‘int’ but argument is of type ‘void *’
+ extern ssize_t recv (int __fd, void *__buf, size_t __n, int __flags);
+                ^
+client.c:46:29: warning: variable ‘bytes_recv’ set but not used [-Wunused-but-set-variable]
+     int status, bytes_sent, bytes_recv;
+                             ^
+client.c:46:17: warning: variable ‘bytes_sent’ set but not used [-Wunused-but-set-variable]
+     int status, bytes_sent, bytes_recv;
+                 ^
+client.c: In function ‘exec’:
+client.c:42:1: warning: control reaches end of non-void function [-Wreturn-type]
+ }
+ ^
+gcc -g -Wall -c -m64 line_parser.c -o line_parser.o
+gcc -g -Wall -c -m64 common.c -o common.o
+gcc -g -Wall client.o line_parser.o common.o -o client

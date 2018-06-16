@@ -1,0 +1,180 @@
+;;;; ip = ip + END_OF_VM ;;;;
+START: t t +		; t = 0
+t END_OF_VM +		; t = -END_OF_VM
+ip t +				; ip = ip + END_OF_VM
+
+;;;; A = ip ;;;;
+READ: t t +			; t = 0
+A A +				; A = 0
+t ip +				; t = -ip
+A t +				; A = ip
+
+;;;; A1 = * A ;;;;
+t t +				; t = 0
+t A +				; t = -A
+LA+1 LA+1 +			; 0 below turns to 0 (code changes itself)
+LA+1 t +			; 0 turns to A
+t t +				; t = 0
+LA: t 0 +			; This line is now t *A +, meaning t = - *A
+A1 A1 +				; A1 = 0
+A1 t +				; A1 = *A
+
+;;;; A11 = ** A ;;;;
+t t +				; t = 0
+t A1 +				; t = -A1
+LA1+1 LA1+1 +		; 0 below turns to 0
+LA1+1 t +			; 0 below turns to A1
+t t +				; t = 0
+LA1: t 0 +			; This line is now t *A1 +, meaning t = - *A1
+A11 A11 +			; A11 = 0
+A11 t +				; A11 = * A1 = ** A
+
+;;;; B = ip + 1 ;;;;
+t t +				; t = 0
+B B +				; B = 0
+t ip +				; t = -ip
+B t +				; B = ip
+B MINUS_1 +			; B = ip + 1
+
+;;;; B1 = * B ;;;;
+t t +				; t = 0
+t B +				; t = -B
+LB+1 LB+1 +			; 0 below turns to 0
+LB+1 t +			; 0 turns to B
+t t +				; t = 0
+LB: t 0 +			; This line is now t *B +, meaning t = - *B
+B1 B1 +				; B1 = 0
+B1 t +				; B1 = *B
+
+;;;; B11 = ** B ;;;;
+t t +				; t = 0
+t B1 +				; t = -B1
+LB1+1 LB1+1 +		; 0 below turns to 0
+LB1+1 t +			; 0 below turns to B1
+t t +				; t = 0
+LB1: t 0 +			; This line is now t *B1 +, meaning t = - *B1
+B11 B11 +			; B11 = 0
+B11 t +				; B11 = * B1 = ** B
+
+;;;; C = ip + 2 ;;;;
+t t +				; t = 0
+C C +				; C = 0
+t ip +				; t = -ip
+C t +				; C = ip
+C MINUS_1 +			; C = ip + 1
+C MINUS_1 +			; C = ip + 2
+
+;;;; C1 = * C ;;;;
+t t +				; t = 0
+t C +				; t = -C
+LC+1 LC+1 +			; 0 below turns to 0
+LC+1 t +			; 0 turns to C
+t t +				; t = 0
+LC: t 0 +			; This line is now t *C +, meaning t = - *C
+C1 C1 +				; C1 = 0
+C1 t +				; C1 = *C
+
+
+;;;; cmp A1, ZERO ;;;;
+;;;; jne CONT    ;;;;
+ST_COND: p p +		; p = 0
+p A1 +				; p = -A1
+q q +				; q = 0
+q ZERO +			; q = -ZERO
+p q CONT			; if ((p = p - q) < 0) goto CONT
+q q +				; q = 0
+q p CONT			; if ((q = q - p) < 0) goto CONT
+
+;;;; cmp B1, ZERO ;;;;
+;;;; jne CONT    ;;;;
+p p +				; p = 0
+p B1 +				; p = -B1
+q q +				; q = 0
+q ZERO +			; q = -ZERO
+p q CONT			; if ((p = p - q) < 0) goto CONT
+q q +				; q = 0
+q p CONT			; if ((q = q - p) < 0) goto CONT
+
+;;;; cmp C1, ZERO ;;;;
+;;;; jne CONT    ;;;;
+p p +				; p = 0
+p C1 +				; p = -C1
+q q +				; q = 0
+q ZERO +			; q = -ZERO
+p q CONT			; if ((p = p - q) < 0) goto CONT
+q q +				; q = 0
+q p CONT			; if ((q = q - p) < 0) goto CONT
+
+;;;; jmp END ;;;;
+t t +				; t = 0
+t ONE END 			; t = -1, therefore goto END
+
+
+;;;; A11 = A11 - B11 ;;;;
+CONT: A11 B11 +		; A11 = A11 - B11
+
+;;;; * A1 = A11 ;;;;
+t t +				; t = 0
+t A1 +				; t = -A1
+Lmv Lmv +			; 
+Lmv t +				;
+Lzro Lzro +			; Init and change the code
+Lzro+1 Lzro+1 +		;
+Lzro t +			;
+Lzro+1 t +			; 
+Lzro: 0 0 +			; *A1 *A1 +
+Lmv: 0 t +			; *A1 A11 +
+
+
+;;;; cmp A11, ZERO ;;;;
+;;;; jl BRANCH     ;;;;
+p p +				; p = 0
+p A11 +				; p = -A11
+q q +				; q = 0
+q ZERO +			; q = -ZERO
+q p BRANCH			; if (A11 - ZERO < 0) goto BRANCH
+
+;;;; ip = ip + 3 ;;;;
+t t +			; t = 0
+t ONE +				; t = -1
+t ONE +				; t = - 2
+t ONE +				; t = - 3
+ip t +				; ip = ip + 3
+
+;;;; jmp READ ;;;;
+t t +				; t = 0
+t ONE READ 			; t = -1, therefore goto READ
+
+
+;;;; ip = END_OF_VM + C1 ;;;;
+BRANCH: t t +		; t = 0
+t END_OF_VM +		; t = -END_OF_VM
+t C1 +				; t = -END_OF_VM - C1
+ip ip +				; ip = 0
+ip t +				; ip = END_OF_VM + C1
+
+;;;; jmp READ ;;;;
+t t +				; t = 0
+t ONE READ 			; t = -1, therefore goto READ
+
+
+END: 0 0 0
+
+;;;;;;;;;;;;;;;;;;; Data labels ;;;;;;;;;;;;;;;;;;;
+
+ip: 0
+t: 0
+p: 0
+q: 0
+A: 0					; i
+A1: 0					; M[i]
+A11: 0					; M[M[i]]
+B: 0					; i+1
+B1: 0					; M[i+1]
+B11: 0					; M[M[i+1]]
+C: 0					; i+2
+C1: 0					; M[i+2]
+ONE: 1
+ZERO: 0
+MINUS_1: -1
+END_OF_VM: 9999

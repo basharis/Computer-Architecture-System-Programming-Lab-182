@@ -1,0 +1,21 @@
+called: gcc
+	/home/basharis/Desktop/caspl_ass3/sicvm_c
+	gcc
+	-g
+	-Wall
+	-c
+	-no-pie
+	sic.c
+	-o
+	sic.o
+
+called: gcc
+	/home/basharis/Desktop/caspl_ass3/sicvm_c
+	gcc
+	-g
+	-Wall
+	-no-pie
+	sic.o
+	-o
+	sic
+

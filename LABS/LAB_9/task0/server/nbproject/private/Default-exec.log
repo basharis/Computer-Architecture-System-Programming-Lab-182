@@ -1,0 +1,11 @@
+called: gcc
+	/home/basharis/Desktop/LAB_9/task0b/server
+	gcc
+	-g
+	-Wall
+	-c
+	-m64
+	server.c
+	-o
+	server.o
+

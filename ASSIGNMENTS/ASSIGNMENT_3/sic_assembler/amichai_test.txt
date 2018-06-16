@@ -1,0 +1,15 @@
+0) t t + ;t = 0
+t w l1 ;t = -1, jump to l1: next two lines are variables, not a SBN instruction
+6) t: 0
+w: 1
+8) l1: l+1 l+1 + ;n = 0
+t t + ;t = 0
+t b + ;t = -1000
+l+1 t + ;n = 1000
+20) t t + ;t = 0
+l: t n + ;t = -(*1000)
+a a +
+a t + ;a = *1000 (== *b)
+32) n: 1234
+a: 0
+b: 1000
